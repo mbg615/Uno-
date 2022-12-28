@@ -11,8 +11,9 @@ int main() {
     _color getCardColor(std::string name);
     _type getCardType(std::string name);
     int getCardNumber(std::string name);
+    void clearScreen();
 
-    std::cout << "Initializing Uno++\n";
+    std::cout << "Game Version: v0.0.1 Pre-alpha\n";
 
     // Get player data
     int numberOfPlayers;
@@ -20,9 +21,19 @@ int main() {
     std::cin >> numberOfPlayers;
     std::cout << "\n";
 
+    if(numberOfPlayers < 2 || numberOfPlayers > 10) {
+        if(numberOfPlayers == 1) {
+            std::cout << "Uno++ does not support 1 player";
+        } else {
+            std::cout << "Uno++ does not currently support " << numberOfPlayers << " players" << std::endl;
+        }
+        exit(-1);
+    }
+
     Player players[numberOfPlayers];
 
     for(int i = 0; i < numberOfPlayers; i++) {
+        clearScreen();
         std::cout << "What is player " << i + 1 << "'s name? ";
         std::cin >> players[i].playerName;
         players[i].playerNumber = i;
@@ -33,6 +44,7 @@ int main() {
     cardFile.open("cards.txt");
 
     // Read each card into the deck vector
+    // TODO: Implement the deck as a std::stack
     std::vector<Card> deck;
     std::string currentCard;
     while(cardFile) {
@@ -64,8 +76,14 @@ int main() {
         }
     }
 
-    for(int i = 0; i < numberOfPlayers; i++) {
-        players[i].displayPlayerCards();
+    clearScreen();
+
+    std::vector<Card> discardPile;
+    Card activeCard = deck.back();
+    deck.pop_back();
+    discardPile.push_back(activeCard);
+    while(numberOfPlayers > 1) {
+
     }
 }
 
