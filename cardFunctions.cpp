@@ -15,33 +15,33 @@ void shuffleDeck(std::vector<Card> &deck) {
     std::shuffle(deck.begin(), deck.end(), rng);
 }
 
-int getCardNumber(std::string name) {
-    if(name.find("0") != std::string::npos) {
+int getCardNumber(std::string &name) {
+    if(name.find('0') != std::string::npos) {
         return 0;
-    } else if(name.find("1") != std::string::npos) {
+    } else if(name.find('1') != std::string::npos) {
         return 1;
-    } else if(name.find("2") != std::string::npos) {
+    } else if(name.find('2') != std::string::npos) {
         return 2;
-    } else if(name.find("3") != std::string::npos) {
+    } else if(name.find('3') != std::string::npos) {
         return 3;
-    } else if(name.find("4") != std::string::npos) {
+    } else if(name.find('4') != std::string::npos) {
         return 4;
-    } else if(name.find("5") != std::string::npos) {
+    } else if(name.find('5') != std::string::npos) {
         return 5;
-    } else if(name.find("6") != std::string::npos) {
+    } else if(name.find('6') != std::string::npos) {
         return 6;
-    } else if(name.find("7") != std::string::npos) {
+    } else if(name.find('7') != std::string::npos) {
         return 7;
-    } else if(name.find("8") != std::string::npos) {
+    } else if(name.find('8') != std::string::npos) {
         return 8;
-    } else if(name.find("9") != std::string::npos) {
+    } else if(name.find('9') != std::string::npos) {
         return 9;
     } else {
         return -1;
     }
 }
 
-_type getCardType(std::string name) {
+_type getCardType(std::string &name) {
     if(name.find("Skip") != std::string::npos) {
         return Skip;
     } else if(name.find("Reverse") != std::string::npos) {
@@ -57,14 +57,14 @@ _type getCardType(std::string name) {
     }
 }
 
-_color getCardColor(std::string name) {
-    if(name.find("Red") != std::string::npos) {
+_color getCardColor(std::string &name) {
+    if (name.find("Red") != std::string::npos) {
         return Red;
-    } else if(name.find("Green") != std::string::npos) {
+    } else if (name.find("Green") != std::string::npos) {
         return Green;
-    } else if(name.find("Yellow") != std::string::npos) {
+    } else if (name.find("Yellow") != std::string::npos) {
         return Yellow;
-    } else if(name.find("Blue") != std::string::npos) {
+    } else if (name.find("Blue") != std::string::npos) {
         return Blue;
     } else {
         return None;

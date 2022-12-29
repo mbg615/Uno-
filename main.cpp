@@ -8,9 +8,9 @@
 #include "dataTypes.h"
 
 int main() {
-    _color getCardColor(std::string name);
-    _type getCardType(std::string name);
-    int getCardNumber(std::string name);
+    _color getCardColor(std::string &name);
+    _type getCardType(std::string &name);
+    int getCardNumber(std::string &name);
     void clearScreen();
 
     std::cout << "Game Version: v0.0.1 Pre-alpha\n";
@@ -22,7 +22,9 @@ int main() {
     std::cout << "\n";
 
     if(numberOfPlayers < 2 || numberOfPlayers > 10) {
-        if(numberOfPlayers == 1) {
+        if(numberOfPlayers == 0) {
+            std::cout << "Uno++ does not support 0 players";
+        } else if(numberOfPlayers == 1) {
             std::cout << "Uno++ does not support 1 player";
         } else {
             std::cout << "Uno++ does not currently support " << numberOfPlayers << " players" << std::endl;

@@ -12,6 +12,7 @@
 enum _color { Red, Green, Yellow, Blue, None };
 enum _type { Number, Skip, Reverse, DrawTwo, DrawFour, Wild };
 
+// TODO: make the _card struct into a class
 typedef struct _card {
     std::string name;
     _color color;
