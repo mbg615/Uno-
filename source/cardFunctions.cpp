@@ -7,7 +7,7 @@
 #include <algorithm>
 #include <random>
 
-#include "dataTypes.h"
+#include "dataTypes.hpp"
 
 void shuffleDeck(std::vector<Card> &deck) {
     auto rd = std::random_device{};

@@ -3,4 +3,4 @@ project(Uno++)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(Uno++ main.cpp dataTypes.h cardFunctions.cpp gameFunctions.cpp)
+add_executable(main.cpp dataTypes.hpp cardFunctions.cpp gameFunctions.cpp)
