@@ -33,13 +33,15 @@ int main(int argc, const char *argv[]) {
         exit(-1);
     }
 
-    Player players[numberOfPlayers];
-
+    std::vector<Player> players;
+    std::string playerName;
     for(int i = 0; i < numberOfPlayers; i++) {
         clearScreen();
         std::cout << "What is player " << i + 1 << "'s name? ";
-        std::cin >> players[i].playerName;
-        players[i].playerNumber = i;
+        std::cin >> playerName;
+        players.emplace_back();
+        players.back().playerName = playerName;
+        players.back().playerNumber = i;
     }
 
     // Open Card File
@@ -51,7 +53,6 @@ int main(int argc, const char *argv[]) {
     }
 
     // Read each card into the deck vector
-    // TODO: Implement the deck as a std::stack
     std::stack<Card> deck;
     std::string currentCard;
     while(cardFile) {
@@ -76,8 +77,8 @@ int main(int argc, const char *argv[]) {
 
     // Give each player their hand
     for(int i = 0; i < 7; i++) {
-        for(int j = 0; j < numberOfPlayers; j++) {
-            players[j].addCards(deck.top());
+        for(auto & player : players) {
+            player.addCards(deck.top());
             deck.pop();
         }
     }
@@ -89,28 +90,32 @@ int main(int argc, const char *argv[]) {
     discardPile.push(deck.top());
     deck.pop();
 
-    void progressPlayerList(Player players[], int len);
+    void progressPlayerList(std::vector<Player> &players);
 
     while(numberOfPlayers > 1) {
-        std::cout << "Current Player: " << players[0].playerName << "\n";
+        std::cout << "Current Player: " << players.front().playerName << "\n";
         std::cout << "Card to play from: ";
         discardPile.top().printCard();
         std::cout << "\n";
 
         std::cout << "\n\n";
-        players[0].displayPlayerCards();
+        players.front().displayPlayerCards();
 
         std::string cardToPlay;
-        std::cout << "\nType card to play: " << std::flush;
-        std::getline(std::cin, cardToPlay);
+        std::cout << "\nSelect a card to play: ";
+        std::getline(std::cin >> std::ws, cardToPlay);
         std::cout << "\n";
 
-        while(!players[0].hasCard(cardToPlay)) {
+        while(!players.front().hasCard(cardToPlay)) {
             std::cout << "Sorry you do not have that card please select a card you have in your hand.\n";
-            std::getline(std::cin, cardToPlay);
+            std::cout << "Type card to play: ";
+            std::getline(std::cin >> std::ws, cardToPlay);
+            std::cout << "\n";
         }
 
-        progressPlayerList(players, numberOfPlayers);
+
+
+        progressPlayerList(players);
 
     }
 }

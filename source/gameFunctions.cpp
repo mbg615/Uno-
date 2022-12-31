@@ -1,4 +1,6 @@
 #include <iostream>
+#include <vector>
+#include <algorithm>
 
 #include "dataTypes.hpp"
 
@@ -7,10 +9,6 @@ void clearScreen() {
     system("clear");
 }
 
-void progressPlayerList(Player players[], int len) {
-    Player playerStore = players[0];
-    for(int i = 0; i < len; i++) {
-        players[i] = players[i + 1];
-    }
-    players[len - 1] = playerStore;
+void progressPlayerList(std::vector<Player> &players) {
+    std::rotate(players.begin(), players.begin() + 1, players.end());
 }
