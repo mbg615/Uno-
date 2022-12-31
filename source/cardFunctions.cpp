@@ -4,15 +4,27 @@
 
 #include <iostream>
 #include <vector>
+#include <stack>
 #include <algorithm>
 #include <random>
 
 #include "dataTypes.hpp"
 
-void shuffleDeck(std::vector<Card> &deck) {
+void shuffleDeck(std::stack<Card> &deck) {
+    std::vector<Card> tempDeck;
+    for(int i = 0; i < deck.size(); i++) {
+        tempDeck.push_back(deck.top());
+        deck.pop();
+    }
+
     auto rd = std::random_device{};
     auto rng = std::default_random_engine{rd()};
-    std::shuffle(deck.begin(), deck.end(), rng);
+    std::shuffle(tempDeck.begin(), tempDeck.end(), rng);
+
+    for(int i = 0; i < tempDeck.size(); i++) {
+        deck.push(tempDeck.back());
+        tempDeck.pop_back();
+    }
 }
 
 int getCardNumber(std::string &name) {

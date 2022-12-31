@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <stack>
 
 // File I/O
 #include <fstream>
@@ -51,45 +52,45 @@ int main(int argc, const char *argv[]) {
 
     // Read each card into the deck vector
     // TODO: Implement the deck as a std::stack
-    std::vector<Card> deck;
+    std::stack<Card> deck;
     std::string currentCard;
     while(cardFile) {
         std::getline(cardFile,currentCard);
-        deck.emplace_back();
-        deck.back().name = currentCard;
-        deck.back().color = getCardColor(currentCard);
-        deck.back().type = getCardType(currentCard);
-        if(deck.back().type == Number) {
-            deck.back().number = getCardNumber(currentCard);
+        deck.emplace();
+        deck.top().name = currentCard;
+        deck.top().color = getCardColor(currentCard);
+        deck.top().type = getCardType(currentCard);
+        if(deck.top().type == Number) {
+            deck.top().number = getCardNumber(currentCard);
         } else {
-            deck.back().number = -1;
+            deck.top().number = -1;
         }
     }
 
     // Remove empty space in deck
-    deck.pop_back();
+    deck.pop();
 
     // Shuffle the deck
-    void shuffleDeck(std::vector<Card> &deck);
+    void shuffleDeck(std::stack<Card> &deck);
     shuffleDeck(deck);
 
     // Give each player their hand
     for(int i = 0; i < 7; i++) {
         for(int j = 0; j < numberOfPlayers; j++) {
-            players[j].addCards(deck.back());
-            deck.pop_back();
+            players[j].addCards(deck.top());
+            deck.pop();
         }
     }
 
     clearScreen();
 
-    std::vector<Card> discardPile;
-    Card activeCard = deck.back();
-    deck.pop_back();
-    discardPile.push_back(activeCard);
-    while(numberOfPlayers > 1) {
-
-    }
+    std::stack<Card> discardPile;
+    Card activeCard = deck.top();
+    deck.pop();
+    discardPile.push(activeCard);
+    std::cout << "Card to play from: ";
+    discardPile.top().printCard();
+    std::cout << "\n";
 }
 
 
