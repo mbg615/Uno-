@@ -53,6 +53,15 @@ class Player {
             playerNumberOfCards += (int) cards.size();
         }
 
+        bool hasCard(std::string possibleCard) {
+            for(int i = 0; i < playerHand.size(); i++) {
+                if(playerHand[i].name == possibleCard) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         void displayPlayerCards() {
             std::cout << playerName << "'s hand:\n";
             for(int i = 0; i < playerHand.size(); i++) {

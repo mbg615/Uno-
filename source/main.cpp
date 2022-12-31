@@ -84,13 +84,35 @@ int main(int argc, const char *argv[]) {
 
     clearScreen();
 
+    // Draw a starting card and create the discard pile
     std::stack<Card> discardPile;
-    Card activeCard = deck.top();
+    discardPile.push(deck.top());
     deck.pop();
-    discardPile.push(activeCard);
-    std::cout << "Card to play from: ";
-    discardPile.top().printCard();
-    std::cout << "\n";
+
+    void progressPlayerList(Player players[], int len);
+
+    while(numberOfPlayers > 1) {
+        std::cout << "Current Player: " << players[0].playerName << "\n";
+        std::cout << "Card to play from: ";
+        discardPile.top().printCard();
+        std::cout << "\n";
+
+        std::cout << "\n\n";
+        players[0].displayPlayerCards();
+
+        std::string cardToPlay;
+        std::cout << "\nType card to play: " << std::flush;
+        std::getline(std::cin, cardToPlay);
+        std::cout << "\n";
+
+        while(!players[0].hasCard(cardToPlay)) {
+            std::cout << "Sorry you do not have that card please select a card you have in your hand.\n";
+            std::getline(std::cin, cardToPlay);
+        }
+
+        progressPlayerList(players, numberOfPlayers);
+
+    }
 }
 
 
