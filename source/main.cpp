@@ -5,9 +5,9 @@
 #include <fstream>
 
 // Custom data types
-#include "dataTypes.h"
+#include "dataTypes.hpp"
 
-int main() {
+int main(int argc, const char *argv[]) {
     _color getCardColor(std::string &name);
     _type getCardType(std::string &name);
     int getCardNumber(std::string &name);
@@ -43,7 +43,11 @@ int main() {
 
     // Open Card File
     std::ifstream cardFile;
-    cardFile.open("cards.txt");
+    if(argc > 1) {
+        cardFile.open(argv[1]);
+    } else {
+        cardFile.open("cards.txt");
+    }
 
     // Read each card into the deck vector
     // TODO: Implement the deck as a std::stack
@@ -51,16 +55,15 @@ int main() {
     std::string currentCard;
     while(cardFile) {
         std::getline(cardFile,currentCard);
-        Card nextCard;
-        nextCard.name = currentCard;
-        nextCard.color = getCardColor(currentCard);
-        nextCard.type = getCardType(currentCard);
-        if(nextCard.type == Number) {
-            nextCard.number = getCardNumber(currentCard);
+        deck.emplace_back();
+        deck.back().name = currentCard;
+        deck.back().color = getCardColor(currentCard);
+        deck.back().type = getCardType(currentCard);
+        if(deck.back().type == Number) {
+            deck.back().number = getCardNumber(currentCard);
         } else {
-            nextCard.number = -1;
+            deck.back().number = -1;
         }
-        deck.push_back(nextCard);
     }
 
     // Remove empty space in deck

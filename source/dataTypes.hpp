@@ -54,25 +54,15 @@ class Player {
         }
 
         void displayPlayerCards() {
-            std::cout << playerName << "'s hand:\n" << std::endl;
+            std::cout << playerName << "'s hand:\n";
             for(int i = 0; i < playerHand.size(); i++) {
-                if(playerHand[i].color == Red) {
-                    std::cout << "\033[;31m" << playerHand[i].name << "\033[0m";
-                } else if(playerHand[i].color == Green) {
-                    std::cout << "\033[;32m" << playerHand[i].name << "\033[0m";
-                } else if(playerHand[i].color == Yellow) {
-                    std::cout << "\033[;33m" << playerHand[i].name << "\033[0m";
-                } else if(playerHand[i].color == Blue) {
-                    std::cout << "\033[;34m" << playerHand[i].name << "\033[0m";
-                } else {
-                    std::cout << playerHand[i].name;
-                }
+                playerHand[i].printCard();
 
                 if(i + 1 != playerHand.size()) {
                     std::cout << ", ";
                 }
             }
-            std::cout << "\n";
+            std::cout << std::endl;
         }
 };
 
