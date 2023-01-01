@@ -8,12 +8,11 @@
 // Custom data types
 #include "dataTypes.hpp"
 
-int main(int argc, const char *argv[]) {
-    _color getCardColor(std::string &name);
-    _type getCardType(std::string &name);
-    int getCardNumber(std::string &name);
-    void clearScreen();
+// Card and game functions
+#include "cardFunctions.hpp"
+#include "gameFunctions.hpp"
 
+int main(int argc, const char *argv[]) {
     std::cout << "Game Version: v0.0.1 Pre-alpha\n";
 
     // Get player data
@@ -55,24 +54,16 @@ int main(int argc, const char *argv[]) {
     // Read each card into the deck vector
     std::stack<Card> deck;
     std::string currentCard;
+
     while(cardFile) {
         std::getline(cardFile,currentCard);
-        deck.emplace();
-        deck.top().name = currentCard;
-        deck.top().color = getCardColor(currentCard);
-        deck.top().type = getCardType(currentCard);
-        if(deck.top().type == Number) {
-            deck.top().number = getCardNumber(currentCard);
-        } else {
-            deck.top().number = -1;
-        }
+        deck.push(buildCard(currentCard));
     }
 
     // Remove empty space in deck
     deck.pop();
 
     // Shuffle the deck
-    void shuffleDeck(std::stack<Card> &deck);
     shuffleDeck(deck);
 
     // Give each player their hand
@@ -89,33 +80,78 @@ int main(int argc, const char *argv[]) {
     std::stack<Card> discardPile;
     discardPile.push(deck.top());
     deck.pop();
-
-    void progressPlayerList(std::vector<Player> &players);
+    // As per official Uno rules
+    if(discardPile.top().type == DrawFour) {
+        deck.push(discardPile.top());
+        discardPile.pop();
+        shuffleDeck(deck);
+    }
 
     while(numberOfPlayers > 1) {
+        if(deck.empty()) {
+            refreshDeck(deck, discardPile);
+        }
+
         std::cout << "Current Player: " << players.front().playerName << "\n";
         std::cout << "Card to play from: ";
         discardPile.top().printCard();
-        std::cout << "\n";
-
         std::cout << "\n\n";
         players.front().displayPlayerCards();
 
-        std::string cardToPlay;
-        std::cout << "\nSelect a card to play: ";
-        std::getline(std::cin >> std::ws, cardToPlay);
-        std::cout << "\n";
+        Card playersCard;
 
-        while(!players.front().hasCard(cardToPlay)) {
-            std::cout << "Sorry you do not have that card please select a card you have in your hand.\n";
-            std::cout << "Type card to play: ";
+        if(players.front().hasCardsToPlay(discardPile.top())) {
+            std::string cardToPlay;
+            std::cout << "\nSelect a card to play or select Draw: ";
             std::getline(std::cin >> std::ws, cardToPlay);
             std::cout << "\n";
+
+            while(!players.front().hasCard(cardToPlay) || cardToPlay.find("Draw") == std::string::npos) {
+                std::cout << "Sorry you do not have that card please select a card you have in your hand.\n";
+                std::cout << "Select a card to play or select Draw: ";
+                std::getline(std::cin >> std::ws, cardToPlay);
+                std::cout << "\n";
+            }
+
+            playersCard = buildCard(cardToPlay);
+
+            while(!cardIsPlayable(playersCard, discardPile.top())) {
+                std::cout << "The card ";
+                playersCard.printCard();
+                std::cout << " cannot be played.\n";
+                std::cout << "Select a card to play or select Draw: ";
+                std::getline(std::cin >> std::ws, cardToPlay);
+                playersCard = buildCard(cardToPlay);
+            }
+        } else {
+            std::cout << "You do not have any cards you can play, you will draw a card.\n";
+            std::cout << "You drew ";
+            Card drawnCard = deck.top();
+            deck.pop();
+
+            drawnCard.printCard();
+
+            if(cardIsPlayable(drawnCard, discardPile.top())) {
+                std::cout << "You can and will play the card\n";
+                discardPile.push(drawnCard);
+            } else {
+                std::cout << "You cannot play this card, it was added to your hand.\n";
+                players.front().addCards(drawnCard);
+            }
         }
 
+        if(playersCard.type == Wild || playersCard.type == DrawFour) {
+            std::cout << "What color would you like to set?: ";
+            std::string newColor;
+            std::cin >> newColor;
+            playersCard.color = getCardColor(newColor);
+        }
 
+        discardPile.push(playersCard);
+        players.front().playCard(playersCard);
 
         progressPlayerList(players);
+        clearScreen();
 
     }
 }

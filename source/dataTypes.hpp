@@ -19,7 +19,7 @@ class Card {
         _type type;
         int number;
 
-        void printCard() {
+        void printCard() const {
             if(color == Red) {
                 std::cout << "\033[;31m" << name << "\033[0m";
             } else if(color == Green) {
@@ -53,9 +53,31 @@ class Player {
             playerNumberOfCards += (int) cards.size();
         }
 
-        bool hasCard(std::string possibleCard) {
+        void playCard(Card &playersCard) {
             for(int i = 0; i < playerHand.size(); i++) {
-                if(playerHand[i].name == possibleCard) {
+                if(playersCard.name == playerHand[i].name) {
+                    playerHand.erase(playerHand.begin() + i);
+                    break;
+                }
+            }
+        }
+
+        bool hasCard(std::string &possibleCard) {
+            for(auto & card: playerHand) {
+                if(card.name == possibleCard) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        bool hasCardsToPlay(Card &cardToPlayFrom) {
+            for(auto & card: playerHand) {
+                if(cardToPlayFrom.type == Wild || cardToPlayFrom.type == DrawFour) {
+                    return true;
+                } else if(cardToPlayFrom.color == card.color) {
+                    return true;
+                } else if(cardToPlayFrom.number == card.number && cardToPlayFrom.type == card.type) {
                     return true;
                 }
             }

@@ -1,8 +1,10 @@
 //
-// Created by xoddam on 12/21/22.
+// Created by Maddox Guthrie on 12/31/22.
 //
 
-#include <iostream>
+#ifndef UNO_CARDFUNCTIONS_HPP
+#define UNO_CARDFUNCTIONS_HPP
+
 #include <vector>
 #include <stack>
 #include <algorithm>
@@ -22,9 +24,20 @@ void shuffleDeck(std::stack<Card> &deck) {
     std::shuffle(tempDeck.begin(), tempDeck.end(), rng);
 
     for(int i = 0; i < tempDeck.size(); i++) {
+        if(deck.top().type == Wild || deck.top().type == DrawFour) {
+            deck.top().color = None;
+        }
         deck.push(tempDeck.back());
         tempDeck.pop_back();
     }
+}
+
+void refreshDeck(std::stack<Card> &deck, std::stack<Card> &discardPile) {
+    for(int i = 0; i < discardPile.size(); i++) {
+        deck.push(discardPile.top());
+        discardPile.pop();
+    }
+    shuffleDeck(deck);
 }
 
 int getCardNumber(std::string &name) {
@@ -51,6 +64,17 @@ int getCardNumber(std::string &name) {
     } else {
         return -1;
     }
+}
+
+bool cardIsPlayable(Card &playersCard, Card &playCard) {
+    if(playersCard.type == Wild || playersCard.type == DrawFour) {
+        return true;
+    } else if(playersCard.color == playCard.color) {
+        return true;
+    } else if(playersCard.number == playCard.number && playersCard.type == playCard.type) {
+        return true;
+    }
+    return false;
 }
 
 _type getCardType(std::string &name) {
@@ -82,3 +106,19 @@ _color getCardColor(std::string &name) {
         return None;
     }
 }
+
+Card buildCard(std::string &cardName) {
+    Card card;
+    card.name = cardName;
+    card.color = getCardColor(cardName);
+    card.type = getCardType(cardName);
+    if(card.type == Number) {
+        card.number = getCardNumber(cardName);
+    } else {
+        card.number = -1;
+    }
+
+    return card;
+}
+
+#endif //UNO_CARDFUNCTIONS_HPP
