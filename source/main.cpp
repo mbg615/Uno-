@@ -1,5 +1,4 @@
 #include <iostream>
-#include <vector>
 #include <stack>
 
 // File I/O
@@ -155,5 +154,3 @@ int main(int argc, const char *argv[]) {
 
     }
 }
-
-
