@@ -67,17 +67,43 @@ int getCardNumber(std::string &name) {
 }
 
 bool cardIsPlayable(Card &playersCard, Card &playCard) {
-    if(playersCard.type == Wild || playersCard.type == DrawFour) {
-        return true;
-    } else if(playersCard.color == playCard.color) {
-        return true;
-    } else if(playersCard.number == playCard.number && playersCard.type == playCard.type) {
-        return true;
+    // Pass if card type is wild or draw four
+    if(playCard.type == Wild || playCard.type == DrawFour) {
+        if(playersCard.color == playCard.color) {
+            return true;
+
+        }
+        return false;
+
     }
+
+    if(playersCard.name == playCard.name) {
+        return true;
+
+    }
+
+    if(playersCard.color == playCard.color && playCard.color != None) {
+        return true;
+
+    }
+
+    if(playersCard.type == playCard.type) {
+        if (playersCard.type == Number) {
+            if (playCard.number == playersCard.number) {
+                return true;
+
+            }
+
+        } else if (playersCard.color == playCard.color) {
+            return true;
+
+        }
+    }
+
     return false;
 }
 
-_type getCardType(std::string &name) {
+cardType getCardType(std::string &name) {
     if(name.find("Skip") != std::string::npos) {
         return Skip;
     } else if(name.find("Reverse") != std::string::npos) {
@@ -93,7 +119,7 @@ _type getCardType(std::string &name) {
     }
 }
 
-_color getCardColor(std::string &name) {
+cardColor getCardColor(std::string &name) {
     if (name.find("Red") != std::string::npos) {
         return Red;
     } else if (name.find("Green") != std::string::npos) {

@@ -8,15 +8,16 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
-enum _color { Red, Green, Yellow, Blue, None };
-enum _type { Number, Skip, Reverse, DrawTwo, DrawFour, Wild };
+enum cardColor { Red, Green, Yellow, Blue, None };
+enum cardType { Number, Skip, Reverse, DrawTwo, DrawFour, Wild };
 
 class Card {
     public:
         std::string name;
-        _color color;
-        _type type;
+        cardColor color;
+        cardType type;
         int number;
 
         void printCard() const {
@@ -39,7 +40,6 @@ class Player {
         std::vector<Card> playerHand;
 
     public:
-        int playerNumber;
         std::string playerName;
         int playerNumberOfCards = 0;
 
@@ -62,28 +62,49 @@ class Player {
             }
         }
 
-        bool hasCard(std::string &possibleCard) {
-            for(auto & card: playerHand) {
-                if(card.name == possibleCard) {
+        bool playerHasCard(Card &cardToSearchFor) {
+            for(Card &card: playerHand) { // Cannot use std::for_each bc it only passes one argument
+                if(card.name == cardToSearchFor.name) {
                     return true;
                 }
             }
             return false;
         }
 
-        bool hasCardsToPlay(Card &cardToPlayFrom) {
-            for(auto & card: playerHand) {
-                if(cardToPlayFrom.type == Wild || cardToPlayFrom.type == DrawFour) {
-                    return true;
-                } else if(cardToPlayFrom.color == card.color) {
-                    return true;
-                } else if(cardToPlayFrom.number == card.number && cardToPlayFrom.type == card.type) {
+        bool playerCanPlay(Card &cardToPlayFrom) {
+            for(Card &card: playerHand) {
+                // Pass if card type is wild or draw four
+                if(card.type == Wild || card.type == DrawFour) {
                     return true;
                 }
+
+                if(card.name == cardToPlayFrom.name) {
+                    return true;
+
+                }
+
+                if(card.color == cardToPlayFrom.color && cardToPlayFrom.color != None) {
+                    return true;
+
+                }
+
+                if(card.type == cardToPlayFrom.type) {
+                    if (cardToPlayFrom.type == Number) {
+                        if (card.number == cardToPlayFrom.number) {
+                            return true;
+                        }
+
+                    } else if (card.color == cardToPlayFrom.color) {
+                        return true;
+
+                    }
+                }
             }
+
             return false;
         }
 
+        // TODO: Sort players cards before displaying them
         void displayPlayerCards() {
             std::cout << playerName << "'s hand:\n";
             for(int i = 0; i < playerHand.size(); i++) {

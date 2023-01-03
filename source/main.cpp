@@ -21,8 +21,8 @@ int main(int argc, const char *argv[]) {
     std::cout << "\n";
 
     if(numberOfPlayers < 2 || numberOfPlayers > 10) {
-        if(numberOfPlayers == 0) {
-            std::cout << "Uno++ does not support 0 players";
+        if(numberOfPlayers < 1) {
+            std::cout << "Uno++ does not support " << numberOfPlayers << " players";
         } else if(numberOfPlayers == 1) {
             std::cout << "Uno++ does not support 1 player";
         } else {
@@ -39,7 +39,6 @@ int main(int argc, const char *argv[]) {
         std::cin >> playerName;
         players.emplace_back();
         players.back().playerName = playerName;
-        players.back().playerNumber = i;
     }
 
     // Open Card File
@@ -97,60 +96,83 @@ int main(int argc, const char *argv[]) {
         std::cout << "\n\n";
         players.front().displayPlayerCards();
 
-        Card playersCard;
+        Card playersCardSelection;
 
-        if(players.front().hasCardsToPlay(discardPile.top())) {
-            std::string cardToPlay;
-            std::cout << "\nSelect a card to play or select Draw: ";
-            std::getline(std::cin >> std::ws, cardToPlay);
-            std::cout << "\n";
+        if(players.front().playerCanPlay(discardPile.top())) {
+            bool selectingCard = true;
+            std::string playersSelection;
+            Card playersSelectionAsCard;
 
-            while(!players.front().hasCard(cardToPlay) || cardToPlay.find("Draw") == std::string::npos) {
-                std::cout << "Sorry you do not have that card please select a card you have in your hand.\n";
-                std::cout << "Select a card to play or select Draw: ";
-                std::getline(std::cin >> std::ws, cardToPlay);
+            while(selectingCard) {
+                // Read the players input
+                std::cout << "\nSelect card or draw: ";
+                std::getline(std::cin >> std::ws, playersSelection);
                 std::cout << "\n";
+
+                // Parse the players input
+                if(playersSelection.find("Draw") == std::string::npos) {
+                    break;
+                }
+
+                playersSelectionAsCard = buildCard(playersSelection);
+
+                if(!players.front().playerHasCard(playersSelectionAsCard)) {
+                    std::cout << "Sorry you do not have that card\n";
+                    selectingCard = true;
+                } else if(!cardIsPlayable(playersSelectionAsCard, discardPile.top())) {
+                    std::cout << "Sorry you cannot play that card\n";
+                    selectingCard = true;
+                } else {
+                    selectingCard = false;
+                }
             }
 
-            playersCard = buildCard(cardToPlay);
+            // Ask player for the new color to play from
+            if(playersSelectionAsCard.type == Wild || playersSelectionAsCard.type == DrawFour) {
+                std::string newColor;
+                std::cout << "What color should we play from?: ";
+                std::cin >> newColor;
+                playersSelectionAsCard.color = getCardColor(newColor);
 
-            while(!cardIsPlayable(playersCard, discardPile.top())) {
-                std::cout << "The card ";
-                playersCard.printCard();
-                std::cout << " cannot be played.\n";
-                std::cout << "Select a card to play or select Draw: ";
-                std::getline(std::cin >> std::ws, cardToPlay);
-                playersCard = buildCard(cardToPlay);
             }
-        } else {
-            std::cout << "You do not have any cards you can play, you will draw a card.\n";
-            std::cout << "You drew ";
+
+            // TODO: Generate a UID for each card to reference cards directly instead of loosely
+            discardPile.push(playersSelectionAsCard);
+            players.front().playCard(playersSelectionAsCard);
+
+        } else { // Player cannot play and they must draw
+            std::cout << "You cannot play any of your cards.\n";
+            std::cout << "You will draw a card.\n";
+
+            // TODO: Implement a draw function to prevent draws taking up 2 lines.
             Card drawnCard = deck.top();
             deck.pop();
-
+            std::cout << "You drew a ";
             drawnCard.printCard();
+            std::cout << "\n";
 
             if(cardIsPlayable(drawnCard, discardPile.top())) {
-                std::cout << "You can and will play the card\n";
+                std::cout << "The ";
+                drawnCard.printCard();
+                std::cout << " can be played.\n";
                 discardPile.push(drawnCard);
-            } else {
-                std::cout << "You cannot play this card, it was added to your hand.\n";
+                std::cout << "You played the ";
+                drawnCard.printCard();
+                std::cout << "\n";
+
+            } else { // Players cannot play the card they drew
+                std::cout << "You cannot play the ";
+                drawnCard.printCard();
+                std::cout << "\n";
                 players.front().addCards(drawnCard);
+                std::cout << "It was added to your hand";
+
             }
         }
 
-        if(playersCard.type == Wild || playersCard.type == DrawFour) {
-            std::cout << "What color would you like to set?: ";
-            std::string newColor;
-            std::cin >> newColor;
-            playersCard.color = getCardColor(newColor);
-        }
-
-        discardPile.push(playersCard);
-        players.front().playCard(playersCard);
-
         progressPlayerList(players);
-        clearScreen();
+        std::cout << "\n\n\n\n\n\n";
+        //clearScreen();
 
     }
 }
