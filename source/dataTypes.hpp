@@ -15,6 +15,7 @@ enum cardType { Number, Skip, Reverse, DrawTwo, DrawFour, Wild };
 
 class Card {
     public:
+        long cardID;
         std::string name;
         cardColor color;
         cardType type;

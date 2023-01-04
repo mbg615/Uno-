@@ -58,8 +58,11 @@ int main(int argc, const char *argv[]) {
         deck.push(buildCard(currentCard));
     }
 
-    // Remove empty space in deck
+    // Remove duplicate card
     deck.pop();
+
+    // Assign an ID to each card in the deck
+    assignCardID(deck);
 
     // Shuffle the deck
     shuffleDeck(deck);
