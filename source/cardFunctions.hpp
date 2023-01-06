@@ -104,6 +104,25 @@ bool cardIsPlayable(Card &playersCard, Card &playCard) {
     return false;
 }
 
+bool cardsAreEqual(Card &cardOne, Card &cardTwo) {
+    if(cardOne.uuid == cardTwo.uuid) {
+        return true;
+
+    } else if(cardOne.name == cardTwo.name) {
+        return true;
+
+    } else if(cardOne.type == cardTwo.type) {
+        if(cardOne.color == cardTwo.color) {
+            if(cardOne.number == cardTwo.number) {
+                return true;
+
+            }
+        }
+    }
+
+    return false;
+}
+
 cardType getCardType(std::string &name) {
     if(name.find("Skip") != std::string::npos) {
         return Skip;
@@ -146,31 +165,6 @@ Card buildCard(std::string &cardName) {
     }
 
     return card;
-}
-
-void assignCardID(std::stack<Card> &deck) {
-    std::vector<long> cardIDs;
-    std::stack<Card> tempCardStack;
-    int deckLen = (int) deck.size();
-    for(int i = 0; i < deckLen; i++) {
-        tempCardStack.push(deck.top());
-        deck.pop();
-    }
-
-    for(int i = 0; i < deckLen; i++) {
-        long nextCardID = random();
-        bool looping = true;
-        while(looping) {
-            if(std::find(cardIDs.begin(), cardIDs.end(), nextCardID) != cardIDs.end()) {
-                looping = true;
-            } else {
-                tempCardStack.top().cardID = nextCardID;
-                deck.push(tempCardStack.top());
-                tempCardStack.pop();
-                looping = false;
-            }
-        }
-    }
 }
 
 #endif //UNO_CARDFUNCTIONS_HPP
