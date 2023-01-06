@@ -10,12 +10,15 @@
 #include <vector>
 #include <algorithm>
 
+// Boost
+#include "boost/uuid/uuid.hpp"
+
 enum cardColor { Red, Green, Yellow, Blue, None };
 enum cardType { Number, Skip, Reverse, DrawTwo, DrawFour, Wild };
 
 class Card {
     public:
-        long cardID;
+        boost::uuids::uuid uuid;
         std::string name;
         cardColor color;
         cardType type;
@@ -103,6 +106,13 @@ class Player {
             }
 
             return false;
+        }
+
+        boost::uuids::uuid findCardToPlay(Card &cardToFind) {
+            for(auto &card: playerHand) {
+
+            }
+
         }
 
         // TODO: Sort players cards before displaying them

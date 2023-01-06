@@ -11,6 +11,11 @@
 #include "cardFunctions.hpp"
 #include "gameFunctions.hpp"
 
+// Boost
+#include <boost/uuid/uuid.hpp>
+#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/uuid_io.hpp>
+
 int main(int argc, const char *argv[]) {
     std::cout << "Game Version: v0.0.1 Pre-alpha\n";
 
@@ -53,16 +58,16 @@ int main(int argc, const char *argv[]) {
     std::stack<Card> deck;
     std::string currentCard;
 
+    boost::uuids::random_generator gen;
+
     while(cardFile) {
         std::getline(cardFile,currentCard);
         deck.push(buildCard(currentCard));
+        deck.top().uuid = gen();
     }
 
     // Remove duplicate card
     deck.pop();
-
-    // Assign an ID to each card in the deck
-    assignCardID(deck);
 
     // Shuffle the deck
     shuffleDeck(deck);
