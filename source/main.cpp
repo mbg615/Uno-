@@ -14,7 +14,6 @@
 // Boost
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
 
 int main(int argc, const char *argv[]) {
     std::cout << "Game Version: v0.0.1 Pre-alpha\n";
@@ -39,7 +38,7 @@ int main(int argc, const char *argv[]) {
     std::vector<Player> players;
     std::string playerName;
     for(int i = 0; i < numberOfPlayers; i++) {
-        clearScreen();
+        //clearScreen();
         std::cout << "What is player " << i + 1 << "'s name? ";
         std::cin >> playerName;
         players.emplace_back();
@@ -52,6 +51,11 @@ int main(int argc, const char *argv[]) {
         cardFile.open(argv[1]);
     } else {
         cardFile.open("cards.txt");
+    }
+
+    if(!cardFile) {
+        std::cout << "Please provide a card file\n";
+        return -1;
     }
 
     // Read each card into the deck vector
@@ -80,7 +84,7 @@ int main(int argc, const char *argv[]) {
         }
     }
 
-    clearScreen();
+    //clearScreen();
 
     // Draw a starting card and create the discard pile
     std::stack<Card> discardPile;
