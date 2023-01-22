@@ -18,6 +18,19 @@
 int main(int argc, const char *argv[]) {
     std::cout << "Game Version: v0.0.1 Pre-alpha\n";
 
+    // Open Card File
+    std::ifstream cardFile;
+    std::string cardProviderFilename = (argc > 1) ? argv[1] : "cards.txt";
+    cardFile.open(cardProviderFilename);
+
+    if(!cardFile.is_open()) {
+        // TODO: Make an error function
+        std::cout << cardProviderFilename << "\033[;31m" << " ERROR: could not open file" << "\033[0m" << std::endl;
+        return -1;
+    }
+
+    cardProviderFilename.clear();
+
     // Get player data
     int numberOfPlayers;
     std::cout << "How many players are there?: ";
@@ -43,19 +56,6 @@ int main(int argc, const char *argv[]) {
         std::cin >> playerName;
         players.emplace_back();
         players.back().playerName = playerName;
-    }
-
-    // Open Card File
-    std::ifstream cardFile;
-    if(argc > 1) {
-        cardFile.open(argv[1]);
-    } else {
-        cardFile.open("cards.txt");
-    }
-
-    if(!cardFile) {
-        std::cout << "Please provide a card file\n";
-        return -1;
     }
 
     // Read each card into the deck vector
