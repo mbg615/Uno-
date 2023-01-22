@@ -6,6 +6,7 @@
 
 // Custom data types
 #include "dataTypes.hpp"
+#include "Player.hpp"
 
 // Card and game functions
 #include "cardFunctions.hpp"
