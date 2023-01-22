@@ -167,4 +167,10 @@ Card buildCard(std::string &cardName) {
     return card;
 }
 
+Card drawCard(std::stack<Card> &deck) {
+    Card drawnCard = deck.top();
+    deck.pop();
+    return drawnCard;
+}
+
 #endif //UNO_CARDFUNCTIONS_HPP
