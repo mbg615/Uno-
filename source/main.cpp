@@ -12,7 +12,6 @@
 #include "gameFunctions.hpp"
 
 // Boost
-#include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_generators.hpp>
 
 int main(int argc, const char *argv[]) {
