@@ -6,17 +6,67 @@
 #include "Card.hpp"
 
 // Class functions
-void Card::printCard() const {
-    if(color == Red) {
-        std::cout << "\033[;31m" << name << "\033[0m";
-    } else if(color == Green) {
-        std::cout << "\033[;32m" << name << "\033[0m";
-    } else if(color == Yellow) {
-        std::cout << "\033[;33m" << name << "\033[0m";
-    } else if(color == Blue) {
-        std::cout << "\033[;34m" << name << "\033[0m";
+Card::Card() = default;
+
+Card::Card(std::string &name, boost::uuids::uuid uuid) {
+    this->name = name;
+    this->uuid = uuid;
+
+    // Set card color
+    if (name.find("Red") != std::string::npos) {
+        color = Red;
+    } else if (name.find("Green") != std::string::npos) {
+        color = Green;
+    } else if (name.find("Yellow") != std::string::npos) {
+        color = Yellow;
+    } else if (name.find("Blue") != std::string::npos) {
+        color = Blue;
     } else {
-        std::cout << name;
+        color = None;
+    }
+
+    // Set card type
+    if(name.find("Skip") != std::string::npos) {
+        type = Skip;
+    } else if(name.find("Reverse") != std::string::npos) {
+        type = Reverse;
+    } else if(name.find("Draw Two") != std::string::npos) {
+        type = DrawTwo;
+    } else if(name.find("Draw Four") != std::string::npos) {
+        type = DrawFour;
+    } else if(name.find("Wild") != std::string::npos) {
+        type = Wild;
+    } else {
+        type = Number;
+    }
+
+    // Set card number
+    if(type == Number) {
+        if(name.find('0') != std::string::npos) {
+            number = 0;
+        } else if(name.find('1') != std::string::npos) {
+            number = 1;
+        } else if(name.find('2') != std::string::npos) {
+            number = 2;
+        } else if(name.find('3') != std::string::npos) {
+            number = 3;
+        } else if(name.find('4') != std::string::npos) {
+            number = 4;
+        } else if(name.find('5') != std::string::npos) {
+            number = 5;
+        } else if(name.find('6') != std::string::npos) {
+            number = 6;
+        } else if(name.find('7') != std::string::npos) {
+            number = 7;
+        } else if(name.find('8') != std::string::npos) {
+            number = 8;
+        } else if(name.find('9') != std::string::npos) {
+            number = 9;
+        } else {
+            number = -1;
+        }
+    } else {
+        number = -1;
     }
 }
 
@@ -36,22 +86,28 @@ std::ostream& operator<<(std::ostream& outStream, const Card& card) {
     return outStream;
 }
 
-int Card::getCardNumber() const {
-    return number;
+bool operator<(Card &lhs, Card rhs){
+    return lhs.getCardColor() < rhs.getCardColor();
 }
 
-boost::uuids::uuid Card::getCardUUID() const {
-    return uuid;
+bool operator==(const Card &lhs, const Card &rhs) {
+    if(lhs.uuid == rhs.uuid) {
+        return true;
+    }
+
+    return false;
 }
 
-std::string Card::getCardName() const {
-    return name;
+cardType Card::getCardType() {
+    return type;
 }
 
-cardColor Card::getCardColor() const {
+cardColor Card::getCardColor() {
     return color;
 }
 
-cardType Card::getCardType() const {
-    return type;
+void Card::sanitizeCard() {
+    if(type == Wild || type == DrawFour) {
+        color = None;
+    }
 }

@@ -18,20 +18,20 @@
 #include "Card.hpp"
 
 class Player {
-    private:
-        std::vector<Card> playerHand;
-        std::string playerName;
-        int playerNumberOfCards = 0;
+private:
 
-    public:
-        void addCards(Card &card);
-        void addCards(std::vector<Card> &cards);
-        void playCard(Card &playersCard);
-        void sortCards();
-        void displayPlayerCards();
+    std::vector<Card> playerHand;
+    std::string playerName;
+    int playerNumberOfCards = 0;
 
-        bool playerHasCard(Card &cardToSearchFor);
-        bool playerCanPlay(Card &cardToPlayFrom);
+public:
+    Player();
+
+    friend std::ostream& operator<<(std::ostream& outStream, const Player& player);
+    friend std::istream& operator>>(std::istream& inStream, Player& player);
+
+    void addCards(Card &card);
+    void displayPlayerCards();
 };
 
 #endif //UNO_PLAYER_HPP

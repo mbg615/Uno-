@@ -18,27 +18,25 @@
 #include "dataTypes.hpp"
 
 class Card {
-    private:
-        boost::uuids::uuid uuid;
-        std::string name;
-        cardColor color;
-        cardType type;
-        int number;
+private:
+    boost::uuids::uuid uuid{};
+    std::string name;
+    cardType type;
+    cardColor color;
+    int number{};
 
-    public:
-        friend std::ostream& operator<<(std::ostream& outStream, const Card& card);
+public:
+    Card();
+    explicit Card(std::string &name, boost::uuids::uuid uuid);
 
-        void printCard() const;
+    friend std::ostream& operator<<(std::ostream& outStream, const Card& card);
+    friend bool operator==(const Card &lhs, const Card &rhs);
+    friend bool operator
 
-        int getCardNumber() const;
+    cardType getCardType();
+    cardColor getCardColor();
 
-        boost::uuids::uuid getCardUUID() const;
-
-        std::string getCardName() const;
-
-        cardColor getCardColor() const;
-        cardType getCardType() const;
-
+    void sanitizeCard();
 };
 
 #endif //UNO_CARD_HPP
