@@ -26,41 +26,41 @@ Card::Card(std::string &name, boost::uuids::uuid uuid) {
     }
 
     // Set card type
-    if(name.find("Skip") != std::string::npos) {
+    if (name.find("Skip") != std::string::npos) {
         type = Skip;
-    } else if(name.find("Reverse") != std::string::npos) {
+    } else if (name.find("Reverse") != std::string::npos) {
         type = Reverse;
-    } else if(name.find("Draw Two") != std::string::npos) {
+    } else if (name.find("Draw Two") != std::string::npos) {
         type = DrawTwo;
-    } else if(name.find("Draw Four") != std::string::npos) {
+    } else if (name.find("Draw Four") != std::string::npos) {
         type = DrawFour;
-    } else if(name.find("Wild") != std::string::npos) {
+    } else if (name.find("Wild") != std::string::npos) {
         type = Wild;
     } else {
         type = Number;
     }
 
     // Set card number
-    if(type == Number) {
-        if(name.find('0') != std::string::npos) {
+    if (type == Number) {
+        if (name.find('0') != std::string::npos) {
             number = 0;
-        } else if(name.find('1') != std::string::npos) {
+        } else if (name.find('1') != std::string::npos) {
             number = 1;
-        } else if(name.find('2') != std::string::npos) {
+        } else if (name.find('2') != std::string::npos) {
             number = 2;
-        } else if(name.find('3') != std::string::npos) {
+        } else if (name.find('3') != std::string::npos) {
             number = 3;
-        } else if(name.find('4') != std::string::npos) {
+        } else if (name.find('4') != std::string::npos) {
             number = 4;
-        } else if(name.find('5') != std::string::npos) {
+        } else if (name.find('5') != std::string::npos) {
             number = 5;
-        } else if(name.find('6') != std::string::npos) {
+        } else if (name.find('6') != std::string::npos) {
             number = 6;
-        } else if(name.find('7') != std::string::npos) {
+        } else if (name.find('7') != std::string::npos) {
             number = 7;
-        } else if(name.find('8') != std::string::npos) {
+        } else if (name.find('8') != std::string::npos) {
             number = 8;
-        } else if(name.find('9') != std::string::npos) {
+        } else if (name.find('9') != std::string::npos) {
             number = 9;
         } else {
             number = -1;
@@ -70,14 +70,14 @@ Card::Card(std::string &name, boost::uuids::uuid uuid) {
     }
 }
 
-std::ostream& operator<<(std::ostream& outStream, const Card& card) {
-    if(card.color == Red) {
+std::ostream &operator<<(std::ostream &outStream, const Card &card) {
+    if (card.color == Red) {
         outStream << "\033[;31m" << card.name << "\033[0m";
-    } else if(card.color == Green) {
+    } else if (card.color == Green) {
         outStream << "\033[;32m" << card.name << "\033[0m";
-    } else if(card.color == Yellow) {
+    } else if (card.color == Yellow) {
         outStream << "\033[;33m" << card.name << "\033[0m";
-    } else if(card.color == Blue) {
+    } else if (card.color == Blue) {
         outStream << "\033[;34m" << card.name << "\033[0m";
     } else {
         outStream << card.name;
@@ -86,12 +86,12 @@ std::ostream& operator<<(std::ostream& outStream, const Card& card) {
     return outStream;
 }
 
-bool operator<(Card &lhs, Card rhs){
+bool operator<(Card &lhs, Card rhs) {
     return lhs.getCardColor() < rhs.getCardColor();
 }
 
 bool operator==(const Card &lhs, const Card &rhs) {
-    if(lhs.uuid == rhs.uuid) {
+    if (lhs.uuid == rhs.uuid) {
         return true;
     }
 
@@ -107,7 +107,38 @@ cardColor Card::getCardColor() {
 }
 
 void Card::sanitizeCard() {
-    if(type == Wild || type == DrawFour) {
+    if (type == Wild || type == DrawFour) {
         color = None;
     }
+}
+
+void Card::setWildColor(std::string &colorStr) {
+    if (type == Wild || type == DrawFour) {
+        if (colorStr == "Red") color = Red;
+        if (colorStr == "Yellow") color = Yellow;
+        if (colorStr == "Green") color = Green;
+        if (colorStr == "Blue") color = Blue;
+    }
+}
+
+bool Card::checkCardCompatibility(Card &topCard) {
+    if (this->type == Wild || this->type == DrawFour) {
+        return true;
+    }
+
+    if (this->color == topCard.color) {
+        return true;
+    }
+
+    if (this->number != -1 || topCard.number != -1) {
+        if (this->number == topCard.number) {
+            return true;
+        }
+    }
+
+    if (this->type == topCard.type) {
+        return true;
+    }
+
+    return false;
 }

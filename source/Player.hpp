@@ -9,6 +9,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <stack>
 #include <algorithm>
 
 // Custom data types
@@ -19,7 +20,6 @@
 
 class Player {
 private:
-
     std::vector<Card> playerHand;
     std::string playerName;
     int playerNumberOfCards = 0;
@@ -27,11 +27,19 @@ private:
 public:
     Player();
 
-    friend std::ostream& operator<<(std::ostream& outStream, const Player& player);
-    friend std::istream& operator>>(std::istream& inStream, Player& player);
+    explicit Player(std::string name);
+
+    friend std::ostream &operator<<(std::ostream &outStream, const Player &player);
+
+    friend std::istream &operator>>(std::istream &inStream, Player &player);
 
     void addCards(Card &card);
+
     void displayPlayerCards();
+
+    void drawCard(std::stack<Card> &deck);
+
+    bool checkPlayability(Card &topCard);
 };
 
 #endif //UNO_PLAYER_HPP
