@@ -27,16 +27,22 @@ private:
 
 public:
     Card();
+
     explicit Card(std::string &name, boost::uuids::uuid uuid);
 
-    friend std::ostream& operator<<(std::ostream& outStream, const Card& card);
+    friend std::ostream &operator<<(std::ostream &outStream, const Card &card);
+
     friend bool operator==(const Card &lhs, const Card &rhs);
-    friend bool operator
+
+    bool checkCardCompatibility(Card &topCard);
 
     cardType getCardType();
+
     cardColor getCardColor();
 
     void sanitizeCard();
+
+    void setWildColor(std::string &colorStr);
 };
 
 #endif //UNO_CARD_HPP

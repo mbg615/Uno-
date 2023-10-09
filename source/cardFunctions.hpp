@@ -7,34 +7,35 @@
 
 #include <vector>
 #include <stack>
+#include <deque>
 #include <algorithm>
 #include <random>
 #include <algorithm>
 
 #include "dataTypes.hpp"
 
-void shuffleDeck(std::stack<Card> &deck) {
-    std::vector<Card> tempDeck;
-    for(int i = 0; i < deck.size(); i++) {
-        tempDeck.push_back(deck.top());
-        deck.pop();
-    }
+void shuffleDeck(iterable_stack<Card> &deck) {
+//    std::vector<Card> tempDeck;
+//    for(int i = 0; i < deck.size(); i++) {
+//        tempDeck.push_back(deck.top());
+//        deck.pop();
+//    }
 
     auto rd = std::random_device{};
     auto rng = std::default_random_engine{rd()};
-    std::shuffle(tempDeck.begin(), tempDeck.end(), rng);
+    std::shuffle(deck.begin(), deck.end(), rng);
 
-    for(int i = 0; i < tempDeck.size(); i++) {
-        if(deck.top().getCardType() == Wild || deck.top().getCardType() == DrawFour) {
-            deck.top().sanitizeCard();
-        }
-        deck.push(tempDeck.back());
-        tempDeck.pop_back();
-    }
+//    for(int i = 0; i < tempDeck.size(); i++) {
+//        if(deck.top().getCardType() == Wild || deck.top().getCardType() == DrawFour) {
+//            deck.top().sanitizeCard();
+//        }
+//        deck.push(tempDeck.back());
+//        tempDeck.pop_back();
+//    }
 }
 
-void refreshDeck(std::stack<Card> &deck, std::stack<Card> &discardPile) {
-    for(int i = 0; i < discardPile.size(); i++) {
+void refreshDeck(iterable_stack<Card> &deck, iterable_stack<Card> &discardPile) {
+    for (int i = 0; i < discardPile.size(); i++) {
         deck.push(discardPile.top());
         discardPile.pop();
     }
@@ -42,15 +43,15 @@ void refreshDeck(std::stack<Card> &deck, std::stack<Card> &discardPile) {
 }
 
 cardType getCardType(std::string &name) {
-    if(name.find("Skip") != std::string::npos) {
+    if (name.find("Skip") != std::string::npos) {
         return Skip;
-    } else if(name.find("Reverse") != std::string::npos) {
+    } else if (name.find("Reverse") != std::string::npos) {
         return Reverse;
-    } else if(name.find("Draw Two") != std::string::npos) {
+    } else if (name.find("Draw Two") != std::string::npos) {
         return DrawTwo;
-    } else if(name.find("Draw Four") != std::string::npos) {
+    } else if (name.find("Draw Four") != std::string::npos) {
         return DrawFour;
-    } else if(name.find("Wild") != std::string::npos) {
+    } else if (name.find("Wild") != std::string::npos) {
         return Wild;
     } else {
         return Number;

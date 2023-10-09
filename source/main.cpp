@@ -4,8 +4,9 @@
 #include <fstream>
 #include <algorithm>
 
-// Custom data types
+// Custom data types and containers
 #include "dataTypes.hpp"
+#include "iterable_stack.hpp"
 #include "Player.hpp"
 
 // Card and game functions
@@ -26,80 +27,110 @@ int main(int argc, const char *argv[]) {
         return -1;
     }
 
-    // Get player data
-    int numberOfPlayers;
-    std::cout << "How many players are there?: ";
-    std::cin >> numberOfPlayers;
-    std::cout << "\n";
-
-    if (numberOfPlayers < 2 || numberOfPlayers > 10) {
-        if (numberOfPlayers < 1) {
-            std::cout << "Uno++ does not support " << numberOfPlayers << " players";
-        } else if (numberOfPlayers == 1) {
-            std::cout << "Uno++ does not support 1 player";
-        } else {
-            std::cout << "Uno++ does not currently support " << numberOfPlayers << " players" << std::endl;
-        }
-        return -1;
-    }
-
     std::vector<Player> players;
     std::string playerName;
-    for (int i = 0; i < numberOfPlayers; i++) {
-        players.emplace_back();
-        std::cout << "What is player " << i + 1 << "'s name? ";
-        std::cin >> players.back();
-    }
-
-    std::stack<Card> deck;
-    std::string currentCard;
-    boost::uuids::random_generator uuidGen;
-    
-
-    // Read each card into the deck vector
-    while (std::getline(cardFile, currentCard)) {
-        deck.emplace(currentCard, uuidGen());
-    }
-    // Remove duplicate card
-    deck.pop();
-
-    // Shuffle the deck
-    shuffleDeck(deck);
-
-    // Give each player their hand
-    for (int i = 0; i < 7; i++) {
-        for (auto &player: players) {
-            player.addCards(deck.top());
-            deck.pop();
+    int numberOfPlayers = 0;
+    std::cout << "Enter a players name: ";
+    while (std::getline(std::cin, playerName)) {
+        if(playerName.empty() && numberOfPlayers < 2) {
+            std::cout << "You must have at least 2 players to play\n";
+            std::cout << "Enter a players name: ";
+        } else if(!playerName.empty()) {
+            addPlayers(players, playerName);
+            numberOfPlayers++;
+        } else if(playerName.empty() && numberOfPlayers >= 2) {
+            break;
+        }
+        std::cout << "Enter a players name";
+        if(numberOfPlayers >= 2) {
+            std::cout << " or press enter to continue: ";
+        } else {
+            std::cout << ": ";
         }
     }
 
-    // Draw a starting card and create the discard pile
-    std::stack<Card> discardPile;
-    discardPile.push(std::move(deck.top()));
+    for (Player &player: players) {
+        std::cout << player << "\n";
+    }
 
-    // As per official Uno rules
-    if (discardPile.top().getCardType() == DrawFour) {
-        deck.push(std::move(discardPile.top()));
+
+//    for (int i = 0; i < numberOfPlayers; i++) {
+//        players.emplace_back();
+//        std::cout << "What is player " << i + 1 << "'s name? ";
+//        std::cin >> players.back();
+//    }
+
+        iterable_stack<Card> deck;
+
+        //std::stack<Card> deck;
+        std::string currentCard;
+        boost::uuids::random_generator uuidGen;
+
+
+        // Read each card into the deck vector
+        while (std::getline(cardFile, currentCard)) {
+            deck.emplace(currentCard, uuidGen());
+        }
+        // Remove duplicate card
+        deck.pop();
+
+        // Shuffle the deck
         shuffleDeck(deck);
-    }
 
-    while (numberOfPlayers > 1) {
-        std::cout << "Current Player: " << players.front() << "\n";
-        players.front().displayPlayerCards();
-
-
-        if (deck.empty()) {
-            refreshDeck(deck, discardPile);
+        // Give each player their hand
+        for (int i = 0; i < 7; i++) {
+            for (auto &player: players) {
+                player.addCards(deck.top());
+                deck.pop();
+            }
         }
 
+        // Draw a starting card and create the discard pile
+        iterable_stack<Card> discardPile;
+        discardPile.push(std::move(deck.top()));
+        deck.pop();
+
+        // As per official Uno rules
+        if (discardPile.top().getCardType() == DrawFour) {
+            deck.push(std::move(discardPile.top()));
+            shuffleDeck(deck);
+        }
+
+        if (discardPile.top().getCardType() == Wild) {
+            std::cout << "Current Player: " << players.front() << "\n";
+            std::cout << "(\033[;31mRed\033[0m, \033[;32mGreen\033[0m, \033[;33mYellow\033[0m, \033[;34mBlue\033[0m)";
+            setWildColor(discardPile.top());
+        }
+
+        clearScreen();
+
+        while (numberOfPlayers > 1) {
+            std::cout << "Current Player: " << players.front() << "\n";
+            std::cout << "Top Card: " << discardPile.top() << "\n\n";
+
+            players.front().displayPlayerCards();
+
+            if (deck.empty()) {
+                refreshDeck(deck, discardPile);
+            }
+
+            // If player cannot play any card
+            if (!players.front().checkPlayability(discardPile.top())) {
+                std::cout << "Cannot Play!\n";
+                exit(-1);
+
+            } else {
+                std::string playerResponse;
+                std::cout << "Choose a card to play, or type \"Draw\" to draw a card. ";
+                std::cin >> playerResponse;
+
+                if (playerResponse != "Draw") {
+
+                }
 
 
+            }
 
-
-
-
-
-        progressPlayerList(players);
+            progressPlayerList(players);
+        }
     }
-}
