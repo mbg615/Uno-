@@ -23,7 +23,7 @@ private:
     std::string name;
     cardType type;
     cardColor color;
-    int number{};
+    int rank{};
 
 public:
     Card();

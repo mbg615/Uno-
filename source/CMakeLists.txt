@@ -13,4 +13,4 @@ endif (Boost_NO_SYSTEM_PATHS)
 find_package(Boost REQUIRED regex date_time system filesystem thread graph program_options)
 include_directories(${BOOST_INCLUDE_DIRS})
 
-add_executable(Uno++ main.cpp dataTypes.hpp Card.hpp Card.cpp Player.hpp Player.cpp cardFunctions.hpp gameFunctions.hpp iterable_stack.hpp)
+add_executable(Uno++ main.cpp dataTypes.hpp gameFunctions.hpp cardFunctions.hpp Card.hpp Card.cpp Player.hpp Player.cpp iterable_stack.hpp)

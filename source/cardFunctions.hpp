@@ -15,23 +15,10 @@
 #include "dataTypes.hpp"
 
 void shuffleDeck(iterable_stack<Card> &deck) {
-//    std::vector<Card> tempDeck;
-//    for(int i = 0; i < deck.size(); i++) {
-//        tempDeck.push_back(deck.top());
-//        deck.pop();
-//    }
-
     auto rd = std::random_device{};
     auto rng = std::default_random_engine{rd()};
     std::shuffle(deck.begin(), deck.end(), rng);
 
-//    for(int i = 0; i < tempDeck.size(); i++) {
-//        if(deck.top().getCardType() == Wild || deck.top().getCardType() == DrawFour) {
-//            deck.top().sanitizeCard();
-//        }
-//        deck.push(tempDeck.back());
-//        tempDeck.pop_back();
-//    }
 }
 
 void refreshDeck(iterable_stack<Card> &deck, iterable_stack<Card> &discardPile) {

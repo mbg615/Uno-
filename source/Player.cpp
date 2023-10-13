@@ -44,12 +44,10 @@ void Player::displayPlayerCards() {
 bool Player::checkPlayability(Card &topCard) {
     for (Card &card: playerHand) {
         if (card.checkCardCompatibility(topCard)) {
-            continue;
-        } else {
-            return false;
+            return true;
         }
     }
-    return true;
+    return false;
 }
 
 void Player::drawCard(std::stack<Card> &deck) {
