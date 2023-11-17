@@ -42,31 +42,12 @@ Card::Card(std::string &name, boost::uuids::uuid uuid) {
 
     // Set card rank
     if (type == Number) {
-        if (name.find('0') != std::string::npos) {
-            rank = 0;
-        } else if (name.find('1') != std::string::npos) {
-            rank = 1;
-        } else if (name.find('2') != std::string::npos) {
-            rank = 2;
-        } else if (name.find('3') != std::string::npos) {
-            rank = 3;
-        } else if (name.find('4') != std::string::npos) {
-            rank = 4;
-        } else if (name.find('5') != std::string::npos) {
-            rank = 5;
-        } else if (name.find('6') != std::string::npos) {
-            rank = 6;
-        } else if (name.find('7') != std::string::npos) {
-            rank = 7;
-        } else if (name.find('8') != std::string::npos) {
-            rank = 8;
-        } else if (name.find('9') != std::string::npos) {
-            rank = 9;
+        if(isnumber(name.back())) {
+            // convert character value to integer representation.
+            rank = name.back() - '0';
         } else {
             rank = -1;
         }
-    } else {
-        rank = -1;
     }
 }
 
@@ -130,13 +111,14 @@ bool Card::checkCardCompatibility(Card &topCard) {
         return true;
     }
 
-    if (this->rank != -1 || topCard.rank != -1) {
-        if (this->rank == topCard.rank) {
-            return true;
-        }
-    }
-
     if (this->type == topCard.type) {
+        if(this->type == Number) {
+            if(this->rank == topCard.rank) {
+                return true;
+            } else {
+                return false;
+            }
+        }
         return true;
     }
 

@@ -44,6 +44,7 @@ void Player::displayPlayerCards() {
 bool Player::checkPlayability(Card &topCard) {
     for (Card &card: playerHand) {
         if (card.checkCardCompatibility(topCard)) {
+            std::cout << card << " can be played on " << topCard << "\n";
             return true;
         }
     }

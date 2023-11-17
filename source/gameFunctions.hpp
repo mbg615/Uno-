@@ -15,7 +15,7 @@
 #include "iterable_stack.hpp"
 
 // Boost
-#include <boost/uuid/uuid_generators.hpp>
+#include <boost/uuid/random_generator.hpp>
 
 void clearScreen() {
     std::cout << std::endl;
@@ -47,7 +47,7 @@ void progressPlayerList(std::vector<Player> &players) {
 }
 
 void setWildColor(Card &card) {
-    std::cout << "(\033[;31mRed\033[0m, \033[;32mGreen\033[0m, \033[;33mYellow\033[0m, \033[;34mBlue\033[0m)";
+    std::cout << "(\033[;31mRed\033[0m, \033[;32mGreen\033[0m, \033[;33mYellow\033[0m, \033[;34mBlue\033[0m\n)";
     std::string colorForWild;
     std::cout << "Choose a color for the card: ";
     std::cin >> colorForWild;
@@ -55,6 +55,7 @@ void setWildColor(Card &card) {
 
     while (card.getCardColor() == None) {
         std::cout << "\nSorry that is not a valid color.\n";
+        std::cout << "(\033[;31mRed\033[0m, \033[;32mGreen\033[0m, \033[;33mYellow\033[0m, \033[;34mBlue\033[0m\n)";
         std::cout << "Choose a color for the card: ";
         std::cin >> colorForWild;
         card.setWildColor(colorForWild);

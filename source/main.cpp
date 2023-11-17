@@ -1,12 +1,13 @@
 // Standard C++
+
 #include <iostream>
-#include <stack>
 #include <fstream>
+#include <stack>
 #include <algorithm>
 
 // Custom data types and containers
-#include "dataTypes.hpp"
 #include "iterable_stack.hpp"
+#include "dataTypes.hpp"
 #include "Player.hpp"
 
 // Card and game functions
@@ -16,15 +17,23 @@
 int main(int argc, const char *argv[]) {
     std::cout << "Welcome to Uno_cpp!\nGame Version: v0.0.2 Pre-alpha\n";
 
-    // Open Card File
+    /* Shorthand variable assignment to if statement result.
+     * std::ifstream cardFile;
+     * if(argc > 1) {
+     *      cardFile = argv[1];
+     * } else {
+     *      cardFile = "cards.txt";
+     * }
+     */
     std::ifstream cardFile((argc > 1) ? argv[1] : "cards.txt");
 
+    // Check if cardFile is open to read.
     if (!cardFile.is_open()) {
         std::cout << "\033[;31m" << " ERROR: could not open file" << "\033[0m" << std::endl;
         return -1;
     }
 
-    // Create players
+    // Create players with checking to prevent < 2
     std::vector<Player> players;
     std::string playerName;
     int numberOfPlayers = 0;
