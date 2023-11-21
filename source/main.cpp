@@ -6,13 +6,13 @@
 #include <algorithm>
 
 // Custom data types and containers
-#include "iterable_stack.hpp"
-#include "dataTypes.hpp"
-#include "Player.hpp"
+#include "Game/iterable_stack.hpp"
+#include "Game/dataTypes.hpp"
+#include "Player/Player.hpp"
 
 // Card and game functions
-#include "cardFunctions.hpp"
-#include "gameFunctions.hpp"
+#include "Card/cardFunctions.hpp"
+#include "Game/gameFunctions.hpp"
 
 int main(int argc, const char *argv[]) {
     std::cout << "Welcome to Uno_cpp!\nGame Version: v0.0.2 Pre-alpha\n";
@@ -95,10 +95,22 @@ int main(int argc, const char *argv[]) {
 
         players.front().displayPlayerCards();
 
-        if(players.front().checkPlayability(discardPile.top())) {
-            std::cout << "YES!\n";
+        if(!players.front().checkPlayability(discardPile.top())) {
+            std::cout << "Choose a card to play\n";
         } else {
-            std::cout << "NO!\n";
+            std::cout << "You cannot play any of your cards.\n";
+            waitUntilInput();
+            Card drawnCard = drawCard(deck);
+            std::cout << "You drew a: " << drawnCard << "\n";
+            if(drawnCard.checkCardCompatibility(discardPile.top())) {
+                std::cout << "You will play this card.\n";
+                waitUntilInput();
+                discardPile.push(drawnCard);
+            } else {
+                std::cout << "You cannot play this card. The card was added to your hand.\n";
+                waitUntilInput();
+                players.front().addCards(drawnCard);
+            }
         }
 
         std::exit(1);

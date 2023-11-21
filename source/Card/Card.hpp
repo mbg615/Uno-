@@ -15,15 +15,15 @@
 #include <boost/uuid/uuid.hpp>
 
 // Custom data types
-#include "dataTypes.hpp"
+#include "../Game/dataTypes.hpp"
 
 class Card {
 private:
-    boost::uuids::uuid uuid{};
+    boost::uuids::uuid uuid;
     std::string name;
     cardType type;
     cardColor color;
-    int rank{};
+    int rank;
 
 public:
     Card();

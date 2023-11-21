@@ -13,10 +13,10 @@
 #include <algorithm>
 
 // Custom data types
-#include "dataTypes.hpp"
+#include "../Game/dataTypes.hpp"
 
 // Card definition
-#include "Card.hpp"
+#include "../Card/Card.hpp"
 
 class Player {
 private:

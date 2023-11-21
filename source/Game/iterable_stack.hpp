@@ -9,7 +9,7 @@
 
 #include <deque>
 
-template<typename T, typename Container = std::deque<T>>
+template<typename T, typename Container = std::deque<T> >
 class iterable_stack : public std::stack<T, Container> {
     using std::stack<T, Container>::c;
 

@@ -12,7 +12,7 @@
 #include <random>
 #include <algorithm>
 
-#include "dataTypes.hpp"
+#include "../Game/dataTypes.hpp"
 
 void shuffleDeck(iterable_stack<Card> &deck) {
     auto rd = std::random_device{};
