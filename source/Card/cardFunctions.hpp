@@ -62,7 +62,32 @@ cardColor getCardColor(std::string &name) {
 Card drawCard(std::stack<Card> &deck) {
     Card drawnCard = deck.top();
     deck.pop();
-    return drawnCard;
+    return std::move(drawnCard);
+}
+
+void playCard(iterable_stack<Card> &discardPile, Card &cardToPlay) {
+    if(cardToPlay.getCardType() != Number) {
+        switch (cardToPlay.getCardType()) {
+            case Skip:
+                break;
+
+            case Reverse:
+                break;
+
+            case DrawTwo:
+                break;
+
+            case DrawFour:
+                break;
+
+            case Wild:
+                break;
+
+            default:
+                break;
+        }
+        discardPile.push(cardToPlay);
+    }
 }
 
 #endif //UNO_CARDFUNCTIONS_HPP

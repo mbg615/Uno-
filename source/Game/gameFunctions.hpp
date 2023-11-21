@@ -22,6 +22,12 @@ void clearScreen() {
     system("clear");
 }
 
+void waitUntilInput() {
+    std::cout << "[Press Enter to continue]" << std::flush;
+    std::getchar();
+    std::cout << "\r                         \r" << std::flush;
+}
+
 void addPlayers(std::vector<Player> &players, std::string &playerName) {
     players.emplace_back(playerName);
 }
