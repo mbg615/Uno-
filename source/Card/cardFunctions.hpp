@@ -13,6 +13,7 @@
 #include <algorithm>
 
 #include "../Game/dataTypes.hpp"
+#include "../Game/gameFunctions.hpp"
 
 void shuffleDeck(iterable_stack<Card> &deck) {
     auto rd = std::random_device{};
@@ -65,29 +66,38 @@ Card drawCard(std::stack<Card> &deck) {
     return std::move(drawnCard);
 }
 
-void playCard(iterable_stack<Card> &discardPile, Card &cardToPlay) {
+cardType playCard(iterable_stack<Card> &discardPile, Card &cardToPlay, std::vector<Player> &players) {
+    cardType cardReturnType = Number;
     if(cardToPlay.getCardType() != Number) {
         switch (cardToPlay.getCardType()) {
             case Skip:
+                progressPlayerList(players);
                 break;
 
             case Reverse:
+                std::reverse(players.begin(), players.end());
                 break;
 
             case DrawTwo:
+                cardReturnType = DrawTwo;
                 break;
 
             case DrawFour:
+                setWildColor(cardToPlay);
+                cardReturnType = DrawFour;
                 break;
 
             case Wild:
+                setWildColor(cardToPlay);
                 break;
 
             default:
                 break;
         }
-        discardPile.push(cardToPlay);
     }
+
+    discardPile.push(cardToPlay);
+    return cardReturnType;
 }
 
 #endif //UNO_CARDFUNCTIONS_HPP

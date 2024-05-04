@@ -95,8 +95,22 @@ int main(int argc, const char *argv[]) {
 
         players.front().displayPlayerCards();
 
-        if(!players.front().checkPlayability(discardPile.top())) {
-            std::cout << "Choose a card to play\n";
+        if(players.front().checkPlayability(discardPile.top())) {
+            Card* chosenCardPtr = nullptr;
+            std::string chosenCard;
+            while(chosenCardPtr == nullptr && !chosenCardPtr->checkCardCompatibility(discardPile.top())) {
+                std::cout << "Choose a card to play\n";
+                chosenCard.clear();
+                std::getline(std::cin, chosenCard);
+                chosenCardPtr = players.front().findCard(chosenCard);
+            }
+
+            playCard(discardPile, *chosenCardPtr, players);
+
+
+
+
+            
         } else {
             std::cout << "You cannot play any of your cards.\n";
             waitUntilInput();
@@ -106,6 +120,7 @@ int main(int argc, const char *argv[]) {
                 std::cout << "You will play this card.\n";
                 waitUntilInput();
                 discardPile.push(drawnCard);
+                playCard(discardPile, drawnCard, players);
             } else {
                 std::cout << "You cannot play this card. The card was added to your hand.\n";
                 waitUntilInput();
@@ -113,6 +128,6 @@ int main(int argc, const char *argv[]) {
             }
         }
 
-        std::exit(1);
+        progressPlayerList(players);
     }
 }

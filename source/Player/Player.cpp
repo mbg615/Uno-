@@ -54,3 +54,12 @@ void Player::drawCard(std::stack<Card> &deck) {
     this->playerHand.push_back(std::move(deck.top()));
     deck.pop();
 }
+
+Card* Player::findCard(std::string &chosenCard) {
+    for(Card &card: playerHand) {
+        if(card.getCardName() == chosenCard) {
+            return &card;
+        }
+    }
+    return nullptr;
+}

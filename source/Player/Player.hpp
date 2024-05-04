@@ -40,6 +40,8 @@ public:
     void drawCard(std::stack<Card> &deck);
 
     bool checkPlayability(Card &topCard);
+
+    Card* findCard(std::string &chosenCard);
 };
 
 #endif //UNO_PLAYER_HPP

@@ -19,11 +19,11 @@
 
 class Card {
 private:
-    boost::uuids::uuid uuid;
+    boost::uuids::uuid uuid{};
     std::string name;
     cardType type;
     cardColor color;
-    int rank;
+    int rank{};
 
 public:
     Card();
@@ -39,6 +39,8 @@ public:
     cardType getCardType();
 
     cardColor getCardColor();
+
+    std::string getCardName();
 
     void sanitizeCard();
 

@@ -87,6 +87,10 @@ cardColor Card::getCardColor() {
     return color;
 }
 
+std::string Card::getCardName() {
+    return name;
+}
+
 void Card::sanitizeCard() {
     if (type == Wild || type == DrawFour) {
         color = None;
