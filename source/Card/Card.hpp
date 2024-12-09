@@ -11,15 +11,11 @@
 #include <vector>
 #include <algorithm>
 
-// Boost
-#include <boost/uuid/uuid.hpp>
-
 // Custom data types
 #include "../Game/dataTypes.hpp"
 
 class Card {
 private:
-    boost::uuids::uuid uuid;
     std::string name;
     cardType type;
     cardColor color;
@@ -28,7 +24,7 @@ private:
 public:
     Card();
 
-    explicit Card(std::string &name, boost::uuids::uuid uuid);
+    explicit Card(std::string &name);
 
     friend std::ostream &operator<<(std::ostream &outStream, const Card &card);
 

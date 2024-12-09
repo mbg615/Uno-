@@ -8,9 +8,8 @@
 // Class functions
 Card::Card() = default;
 
-Card::Card(std::string &name, boost::uuids::uuid uuid) {
+Card::Card(std::string &name) {
     this->name = name;
-    this->uuid = uuid;
 
     // Set card color
     if (name.find("Red") != std::string::npos) {
@@ -69,14 +68,6 @@ std::ostream &operator<<(std::ostream &outStream, const Card &card) {
 
 bool operator<(Card &lhs, Card rhs) {
     return lhs.getCardColor() < rhs.getCardColor();
-}
-
-bool operator==(const Card &lhs, const Card &rhs) {
-    if (lhs.uuid == rhs.uuid) {
-        return true;
-    }
-
-    return false;
 }
 
 cardType Card::getCardType() {

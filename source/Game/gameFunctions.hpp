@@ -14,9 +14,6 @@
 #include "dataTypes.hpp"
 #include "iterable_stack.hpp"
 
-// Boost
-#include <boost/uuid/random_generator.hpp>
-
 void clearScreen() {
     std::cout << std::endl;
     system("clear");
@@ -34,12 +31,11 @@ void addPlayers(std::vector<Player> &players, std::string &playerName) {
 
 void fillDeck(std::ifstream &cardFile, iterable_stack<Card> &deck, int numberOfPlayers) {
     std::string currentCard;
-    boost::uuids::random_generator uuidGen;
 
     int i = 0;
     do {
         while (std::getline(cardFile, currentCard)) {
-            deck.emplace(currentCard, uuidGen());
+            deck.emplace(currentCard);
         }
         deck.pop();
         cardFile.clear();
